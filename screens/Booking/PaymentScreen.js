@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Alert 
 import { Button, Block, Text, theme } from 'galio-framework';
 import { View } from 'react-native';
 import Product from '../../components/Service';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width } = Dimensions.get('screen');
 import products from '../../constants/services';
@@ -17,10 +18,27 @@ export default class PaymentScreen extends React.Component {
     this.postPayment = this.postPayment.bind(this);
   }
 
-  postPayment() {
+  async postPayment() {
     const { navigation } = this.props;
+    const userId = await AsyncStorage.getItem("userId");
+    const currentService = await AsyncStorage.getItem("currentService");
+    const currentAddress = await AsyncStorage.getItem("currentAddress");
+    const currentTime = await AsyncStorage.getItem("currentTime");
+    console.log(currentService + currentAddress + currentTime);
+    if (userId !== null) {
     fetch('https://zjil8ive37.execute-api.ca-central-1.amazonaws.com/dev/cm-post-payment',
-      { method: "POST" })
+      { method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        UserId: userId,
+        ServiceName: currentService,
+        Address: currentAddress,
+        Time: currentTime
+      })
+     })
       .then(res => res.json())
       .then(response =>
         this.setState({ data: response },
@@ -30,7 +48,8 @@ export default class PaymentScreen extends React.Component {
             [
               {
                 text: 'OK', onPress: () => {
-                  navigation.navigate("ConfirmationScreen", this.state.data)
+                  console.log(this.state.data);
+                  navigation.navigate("ConfirmationScreen", this.state.data);
                 }
               },
             ],
@@ -39,7 +58,7 @@ export default class PaymentScreen extends React.Component {
 
         ))
       .catch(error => console.log(error));
-
+      }
   }
 
 
