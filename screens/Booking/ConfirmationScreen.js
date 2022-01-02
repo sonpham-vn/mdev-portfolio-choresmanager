@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Block, Text, theme } from 'galio-framework';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import Product from '../../components/Service';
 import Iconicons from 'react-native-vector-icons/Ionicons';
 
@@ -32,7 +32,12 @@ export default class ConfirmationScreen extends React.Component {
           <Block card style={[styles.products, styles.shadow]}>
             <View style={styles.container211}>
               <View style={styles.container212}>
-                <Iconicons name='ios-person' size={60} color='#77AA46' />
+              <Image
+                  style={styles.tinyLogo}
+                  source={{
+                    uri: data.avatar,
+                  }}
+                />
               </View>
               <View style={styles.container213}>
                 <Text style={styles.text_green_bold_2}> {data.name} </Text>
@@ -243,6 +248,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
   },
+
+  tinyLogo: {
+    width: 100,
+    height: 100,
+  },
+
   text_row: {
     marginLeft: 10,
     marginRight: 10,

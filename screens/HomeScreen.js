@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Searchbar } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
   Text,
@@ -15,6 +16,44 @@ import {
 const HomeScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState({});
+
+  const getActivityList = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if(userId !== null) {
+      // value previously stored
+        try {
+          let url = 'https://zjil8ive37.execute-api.ca-central-1.amazonaws.com/dev/get-user-info?UserId='
+          url = url + userId;
+          const response = await fetch(url);
+          const json = await response.json();
+          setData(json);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+ 
+  }
+
+  useEffect(() => {
+    getActivityList();
+  }, []);
+
+  useEffect(() => {
+      const unsubscribe = navigation.addListener('tabPress', (e) => {
+          getActivityList();
+      });
+  
+      return unsubscribe;
+    }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -85,13 +124,14 @@ const HomeScreen = ({ navigation }) => {
               <Text>And More...</Text>
             </View>
           </View>
-          <View style={styles.box2}>
+        </View>
+        
+      </View>
+      <View style={styles.box2}>
             <View style={styles.box2_1}>
-              <Text>Current Points:500</Text>
+              <Text>👑Current Points: {data.RoyaltyPoint}</Text>
             </View>
           </View>
-        </View>
-      </View>
     </View>
   )
 }
@@ -139,8 +179,7 @@ const styles = StyleSheet.create({
   },
 
   box1: {
-    marginTop: 50
-
+    marginTop: 50,
   },
 
   box1_1: {
@@ -163,13 +202,14 @@ const styles = StyleSheet.create({
   },
 
   box2: {
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    backgroundColor: 'white'
   },
 
 
   box2_1: {
     height: 'auto',
-    marginTop: 150,
+    marginBottom:10,
     alignItems: 'center',
     backgroundColor: "#fff",
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('screen');
 
@@ -10,7 +11,9 @@ class Product extends React.Component {
 
     return (
       <Block row={horizontal} card flex style={[styles.product, styles.shadow, style]}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('MapScreen')} >
+        <TouchableWithoutFeedback onPress={() => {
+          AsyncStorage.setItem('currentService',product.title);
+          navigation.navigate('MapScreen');}} >
           <Block flex space="between" style={styles.productDescription}>
             <Text size={16} style={styles.productTitle}>{product.title}</Text>
             <Text style={styles.productRate} color={priceColor}>Avg Rate:${product.price}/hours</Text>

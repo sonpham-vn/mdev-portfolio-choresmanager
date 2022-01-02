@@ -18,7 +18,7 @@ const AccountScreen = ({ navigation }) => {
       <View style={styles.footer} >
         <View style={styles.box1}>
           <TouchableOpacity style={[styles.boxStyle, styles.box1, styles.shadow]}
-            onPress={() => Linking.openURL('https://choresmanager.com/account')}
+            onPress={() => navigation.navigate('EditInfoScreen')}
           >
             <View style={styles.defaultContainer}>
               <Text style={styles.text_style}>
@@ -28,7 +28,7 @@ const AccountScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.boxStyle, styles.box1, styles.shadow]}
-            onPress={() => Linking.openURL('https://choresmanager.com/point')}
+            onPress={() => navigation.navigate('MemberScreen')}
           >
             <View style={styles.defaultContainer}>
 
@@ -49,7 +49,7 @@ const AccountScreen = ({ navigation }) => {
             </View>
           </  TouchableOpacity>
           <TouchableOpacity style={[styles.boxStyle, styles.box1, styles.shadow]}
-            onPress={() => Linking.openURL('https://choresmanager.com/helpdesk')}
+            onPress={() => Linking.openURL('http://choresmanager.s3-website.ca-central-1.amazonaws.com/')}
           >
             <View style={styles.defaultContainer}>
 
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     color: '#77AA46',
     fontWeight: 'bold',
     left: 10,
+    fontSize: 18
   },
 
   shadow: {
